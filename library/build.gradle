@@ -1,0 +1,63 @@
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.M13"
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'de.mannodermaus.android-junit5'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+junitPlatform {
+    jupiterVersion '5.0.0-M6'
+    platformVersion '1.0.0-M6'
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    testImplementation junitJupiter()
+    testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    testImplementation 'org.assertj:assertj-core:3.7.0'
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+}
+
+repositories {
+    mavenCentral()
+}
+
+detekt {
+    version = "1.0.0.M13"
+    profile("main") {
+        input = "$projectDir/src/main/java"
+        config = "../detekt.yml"
+        output = "$project.buildDir/reports/detekt.xml"
+        outputFormat = "xml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    }
+}
+
+check.dependsOn detektCheck
