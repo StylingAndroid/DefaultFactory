@@ -9,7 +9,7 @@ typealias LocalTimeProvider = () -> LocalDateTime
 
 class DateStringProvider(
         val localisazedDatetimeFormatter : DateTimeFormatter = defaultFormatter,
-        val localDateTimeProvider : LocalTimeProvider = DateStringProvider.defaultLocaltimeProvider
+        val localDateTimeProvider : LocalTimeProvider = defaultLocaltimeProvider
 ) {
     companion object {
         val defaultFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
