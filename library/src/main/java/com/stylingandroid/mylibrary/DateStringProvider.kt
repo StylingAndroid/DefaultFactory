@@ -1,26 +1,21 @@
 package com.stylingandroid.mylibrary
 
+import com.stylingandroid.mylibrary.DateStringProvider.Companion.defaultFormatter
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
+typealias LocalTimeProvider = () -> LocalDateTime
 
-class DateStringProvider internal constructor(private val factory: Factory) {
-
-    constructor() : this(DefaultFactory)
-
-    fun buildDateString() =
-            factory.getLocalisedDateTimeFormatter().format(factory.getLocalDateTime()) as String
-
-    internal interface Factory {
-        fun getLocalDateTime(): LocalDateTime
-        fun getLocalisedDateTimeFormatter(): DateTimeFormatter
+class DateStringProvider(
+        val localisazedDatetimeFormatter : DateTimeFormatter = defaultFormatter,
+        val localDateTimeProvider : LocalTimeProvider = defaultLocaltimeProvider
+) {
+    companion object {
+        val defaultFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
+        val defaultLocaltimeProvider : LocalTimeProvider = { LocalDateTime.now() }
     }
 
-    private object DefaultFactory : Factory {
-        override fun getLocalisedDateTimeFormatter(): DateTimeFormatter =
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
-
-        override fun getLocalDateTime(): LocalDateTime = LocalDateTime.now()
-    }
+    fun buildDateString() : String =
+            localisazedDatetimeFormatter.format(localDateTimeProvider())
 }
