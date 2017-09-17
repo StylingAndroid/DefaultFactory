@@ -6,14 +6,16 @@ import com.nhaarman.mockito_kotlin.mock
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.FreeSpec
+import org.threeten.bp.LocalDateTime
 
 class DateStringProviderTest : FreeSpec() { init {
 
-    val DATE_STRING = "Date String"
-
     "Given a DateStringProvider instance" - {
+        val DATE_STRING = "Date String"
+        val now : LocalDateTime = mock {  }
+
         val testableClass = DateStringProvider(
-                localDateTime = mock { },
+                localDateTimeProvider= { now },
                 localisazedDatetimeFormatter = mock {
                     on {
                         format(any())
